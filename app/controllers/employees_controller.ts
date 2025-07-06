@@ -10,9 +10,6 @@ import {
 import { getReqQuery, postputReq, patchReq } from '#validators/employee'
 
 export default class EmployeesController {
-  /**
-   * Display a list of resource
-   */
   async index({ response }: HttpContext) {
     try {
 
@@ -25,9 +22,6 @@ export default class EmployeesController {
     }
   }
 
-  /**
-   * Handle form submission for the create action
-   */
   async store({ request, response }: HttpContext) {
     try {
 
@@ -41,9 +35,6 @@ export default class EmployeesController {
     }
   }
 
-  /**
-   * Show individual record
-   */
   async show({ request, params, response }: HttpContext) {
     try {
       if (params.id != null && request.qs() == null) {
@@ -78,6 +69,7 @@ export default class EmployeesController {
       return response.status(500).send(err.message)
 	}
   }
+
   async update({ params, request, response }: HttpContext) {
     try {
 		const req = request.only(['name','dob','salary','mgrId'])
@@ -89,9 +81,6 @@ export default class EmployeesController {
     }
   }
 
-  /**
-   * Delete record
-   */
   async destroy({ params, response }: HttpContext) {
     try {
       const del = await deleteEmp(params.id)

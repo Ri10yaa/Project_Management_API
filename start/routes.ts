@@ -24,7 +24,7 @@ router.group(()=>{
     match: /^[0-9]$/
   })
 
-  router.patch('/:id','#controllers/employees_controller.update').where('id',{
+  router.patch('/:id','#controllers/employees_controller.handlePatch').where('id',{
     match: /^[0-9]$/
   })
 

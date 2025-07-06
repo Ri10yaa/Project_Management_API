@@ -1,6 +1,5 @@
 // get all employees
 import Employee from '#models/employee'
-import { DateTime } from 'luxon'
 
 export const getAll = async () => {
   const emps = await Employee.all()
