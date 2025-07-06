@@ -2,14 +2,14 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Manager extends BaseModel {
-  @column({ isPrimary: true })
+  @column({ isPrimary: true, columnName: "mgrId" })
   declare mgrId: number
 
-  @column()
+  @column({columnName: "mgrName"})
   declare mgrName: string
 
-  @column.date()
-  declare dob: DateTime
+  @column()
+  declare dob: Date
 
   @column()
   declare salary: number

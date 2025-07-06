@@ -8,6 +8,7 @@ import {
   updateEmp,
 } from '../repositories/employee_repo.js'
 import { getReqQuery, postputReq, patchReq } from '#validators/employee'
+import Employee from '#models/employee'
 
 export default class EmployeesController {
   async index({ response }: HttpContext) {
@@ -18,7 +19,7 @@ export default class EmployeesController {
       return response.status(200).send(res)
 
     } catch (err) {
-      return response.status(500).send(err.message)
+      return response.status(500).send(err.messages)
     }
   }
 
@@ -26,12 +27,12 @@ export default class EmployeesController {
     try {
 
       const payload = await postputReq.validate(request.body())
-      const emp = await postEmp(payload)
+      const emp = await postEmp(payload as Employee)
 
       return response.status(200).send(emp)
 
     } catch (err) {
-      return response.status(500).send(err.message)
+      return response.status(500).send(err.messages)
     }
   }
 
@@ -55,38 +56,40 @@ export default class EmployeesController {
       }
     } catch (err) {
 
-      return response.status(500).send(err.message)
+      return response.status(500).send(err.messages)
     }
   }
  
   async handlePatch({params, request, response} : HttpContext){
-	try{
-		const payload = await patchReq.validate(request.body)
-		const emp = await updateEmp(params.id,payload)
-		return response.status(200).send(emp)
-	}catch(err){
+	  try{
+      const payload = await patchReq.validate(request.body)
+      const emp = await updateEmp(params.id, payload as Employee)
+
+      return response.status(200).send(emp)
+
+	  }catch(err){
 		
-      return response.status(500).send(err.message)
-	}
+      return response.status(500).send(err.messages)
+	  }
   }
 
   async update({ params, request, response }: HttpContext) {
     try {
 		const req = request.only(['name','dob','salary','mgrId'])
 		const payload = await postputReq.validate(req)
-		const emp = updateEmp(params.id,payload)
+		const emp = updateEmp(params.id, payload as Employee)
 		return response.status(200).send(emp)
     } catch (err) {
-      return response.status(500).send(err.message)
+      return response.status(500).send(err.messages)
     }
   }
 
   async destroy({ params, response }: HttpContext) {
     try {
-      const del = await deleteEmp(params.id)
+      await deleteEmp(params.id)
       return response.status(200).send('Employee deleted.')
     } catch (err) {
-      return response.status(500).send(err.message)
+      return response.status(500).send(err.messages)
     }
   }
 }

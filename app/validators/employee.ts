@@ -10,11 +10,11 @@ export const getReqQuery = vine.compile(
 
 export const postputReq = vine.compile(
     vine.object({
-        name: vine.string().minLength(3).maxLength(30),
+        empName: vine.string().minLength(3).maxLength(30),
         dob: vine.date({formats: ['DD/MM/YYYY']}),
         salary: vine.number(),
-        mgrId: vine.number()
-
+        mgrId: vine.number(),
+        designation : vine.enum(['developer','architect','analyst'])
     })
 )
 

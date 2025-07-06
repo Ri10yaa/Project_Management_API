@@ -19,6 +19,9 @@ export default class Employee extends BaseModel {
   @column({columnName: 'mgrId'})
   declare mgrId: number
 
+  @column()
+  declare designation: 'developer' | 'analyst' | 'architect'
+
   @belongsTo(() => Manager)
   declare mgr: BelongsTo<typeof Manager>
 
