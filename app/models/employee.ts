@@ -1,41 +1,45 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, belongsTo, column } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import Manager from './manager.js'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { format } from 'date-fns'
+
 
 export default class Employee extends BaseModel {
   @column({ isPrimary: true, columnName: 'empId' })
   declare empId: number
 
-  @column({columnName: 'empName'})
+  @column({ columnName: 'empName' })
   declare empName: string
 
-  @column()
+  @column({serialize: (value: Date) => format(value, 'dd/MM/yyyy')})
   declare dob: Date
 
   @column()
   declare salary: number
 
-  @column({columnName: 'mgrId'})
+  @column({ columnName: 'mgrId' })
   declare mgrId: number
 
   @column()
   declare designation: 'developer' | 'analyst' | 'architect'
 
-  @belongsTo(() => Manager)
-  declare mgr: BelongsTo<typeof Manager>
+  @column()
+  declare email: string
 
-  @column.dateTime({ autoCreate: true })
+  @column()
+  declare phno: string
+
+
+  @column.dateTime({ autoCreate: true, serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm') })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm') })
   declare updatedAt: DateTime
 
-  @beforeSave()
-  static async checkMgrId(emp: Employee){
-    const mgr = await Manager.find(emp.mgrId)
-    if(!mgr){
-      throw new Error('Manager does not exist.')
-    }
-  }
+  // @beforeSave()
+  // static async checkMgrId(emp: Employee) {
+  //   const mgr = await Manager.find(emp.mgrId)
+  //   if (!mgr) {
+  //     throw new Error('Manager does not exist.')
+  //   }
+  // }
 }

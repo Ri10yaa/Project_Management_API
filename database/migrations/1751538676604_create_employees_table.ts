@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('empId')
       table.string('empName')
       table.date('dob')
-      table.integer('salary') 
+      table.integer('salary')
       // should add foreign key for the managerId column
 
       table.timestamp('created_at')

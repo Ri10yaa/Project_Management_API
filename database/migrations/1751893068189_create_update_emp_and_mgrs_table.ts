@@ -5,11 +5,13 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.enu('designation', ['developer', 'architect', 'analyst'], {
-        useNative: true,
-        enumName: 'empType',
-        existingType: false,
-      })
+      table.string('email'),
+      table.string('phno',10)
+    })
+
+    this.schema.alterTable('managers',(table) =>{
+      table.string('email'),
+      table.string('phno',10)
     })
   }
 

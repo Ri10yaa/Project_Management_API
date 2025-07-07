@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.integer('assignedTo').references('empId').inTable('employees')
       table.dateTime('completedAt')
       table.integer('proId').references('proId').inTable('projects')
-      
+
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

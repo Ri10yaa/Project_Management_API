@@ -1,7 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import Employee from './employee.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Task extends BaseModel {
   @column({ isPrimary: true })
@@ -10,19 +8,18 @@ export default class Task extends BaseModel {
   @column()
   declare taskTitle: string
 
-  @column.dateTime({autoCreate: true})
-  declare assignedAt: DateTime
+  @column()
+  declare assignedTo: number
 
-  @belongsTo(()=> Employee)
-  declare emp: BelongsTo<typeof Employee>
-
-  @column.dateTime()
+  @column({serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm')})
   declare completedAt: DateTime
-  
 
-  @column.dateTime({ autoCreate: true })
+  @column()
+  declare proId: number
+
+  @column.dateTime({ autoCreate: true, serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm') })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm') })
   declare updatedAt: DateTime
 }

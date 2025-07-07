@@ -1,7 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
-import Manager from './manager.js'
-import type { HasOne } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Project extends BaseModel {
   @column({ isPrimary: true })
@@ -13,13 +11,14 @@ export default class Project extends BaseModel {
   @column()
   declare type: 'IoT' | 'Web' | 'Mobile' | 'ML'
 
-  @hasOne(() => Manager)
-  declare mgr: HasOne<typeof Manager>
-  
+  @column()
+  declare mgrId: number
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true, serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm') })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm') })
   declare updatedAt: DateTime
+
+  //add before save here
 }

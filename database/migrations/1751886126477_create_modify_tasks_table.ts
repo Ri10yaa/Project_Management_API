@@ -1,15 +1,11 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'employees'
+  protected tableName = 'tasks'
 
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.enu('designation', ['developer', 'architect', 'analyst'], {
-        useNative: true,
-        enumName: 'empType',
-        existingType: false,
-      })
+      table.dropColumn('assignedAt')
     })
   }
 
