@@ -1,4 +1,5 @@
 import Project from '#models/project'
+import { projectType } from '#validators/project'
 
 export const getAll = async () => {
   const pros = await Project.all()
@@ -19,7 +20,7 @@ export const getProByQry = async (title: string, type: string) => {
 Either I should destructure it in the controller and send individual params or
 send as instance of model
 */
-export const postPro = async (payload: Project) => {
+export const postPro = async (payload: {proTitle: string, type: projectType, mgrId: number}) => {
   const exisPro = await Project.query()
     .where('proTitle', payload.proTitle)
     .andWhere('type', payload.type)

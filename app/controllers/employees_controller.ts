@@ -11,51 +11,49 @@ import { getReqQuery, postputReq, patchReq, validatePathParam } from '#validator
 import Employee from '#models/employee'
 
 export default class EmployeesController {
-  async index({ response }: HttpContext) {
+  async index({}: HttpContext) {
     try {
       const res = await getAll()
 
-      return response.status(200).send({ success: true, data: res })
+      return { success: true, data: res }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
-  async store({ request, response }: HttpContext) {
+  async store({ request }: HttpContext) {
     try {
       const payload = await postputReq.validate(request.body())
-      const emp = await postEmp(payload as Employee)
-
-      return response.status(200).send({ success: true, data: emp })
+      const emp = await postEmp(payload)
+      
+      return { success: true, data: emp }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
-  async show({ request, params, response }: HttpContext) {
+  async show({ request, params }: HttpContext) {
     try {
-      if (params.id != null && Object.keys(request.qs()).length == 0) {
+      if (params.id !== null && Object.keys(request.qs()).length === 0) {
         const pathparam = await validatePathParam.validate(params)
 
         const res = getEmpById(pathparam.id)
-        return response.status(200).send({ success: true, data: res })
-      } else if (params.id == null && Object.keys(request.qs()).length > 0) {
 
+        return { success: true, data: res }
+      } else if (params.id === null && Object.keys(request.qs()).length > 0) {
         const payload = await getReqQuery.validate(request.qs())
         const res = await getEmpByQry(payload.empName, payload.email)
 
-        return response.status(200).send({ success: true, data: res })
+        return { success: true, data: res }
       } else {
-        return response
-          .status(404)
-          .send({ success: false, data: 'Send either path param or query param.' })
+        return { success: false, data: 'Send either path param or query param.' }
       }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
-  async handlePatch({ params, request, response }: HttpContext) {
+  async handlePatch({ params, request }: HttpContext) {
     try {
       const pathparam = await validatePathParam.validate(params)
 
@@ -63,15 +61,23 @@ export default class EmployeesController {
 
       const emp = await updateEmp(pathparam.id, payload as Employee)
 
-      return response.status(200).send({ success: true, data: emp })
+      return { success: true, data: emp }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request }: HttpContext) {
     try {
-      const req = request.only(['empName', 'dob', 'salary', 'mgrId','phno', 'email','designation'])
+      const req = request.only([
+        'empName',
+        'dob',
+        'salary',
+        'mgrId',
+        'phno',
+        'email',
+        'designation',
+      ])
 
       const pathparam = await validatePathParam.validate(params)
 
@@ -79,21 +85,21 @@ export default class EmployeesController {
 
       const emp = await updateEmp(pathparam.id, payload as Employee)
 
-      return response.status(200).send({ success: true, data: emp })
+      return { success: true, data: emp }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params }: HttpContext) {
     try {
       const pathparam = await validatePathParam.validate(params)
 
       await deleteEmp(pathparam.id)
 
-      return response.status(200).send({ success: true, data: 'Employee deleted.' })
+      return { success: true, data: 'Employee deleted.' }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 }

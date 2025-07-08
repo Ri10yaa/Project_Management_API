@@ -1,5 +1,5 @@
 import Employee from '#models/employee'
-
+import { designations } from '#validators/employee'
 export const getAll = async () => {
   const emps = await Employee.all()
   return emps
@@ -20,7 +20,7 @@ export const getEmpByQry = async (name: string, email: string) => {
 Either I should destructe it the controller and send individual params or
 send as instance of model
 */
-export const postEmp = async (payload: Employee) => {
+export const postEmp = async (payload: {empName: string, email: string, dob: Date, salary: number, mgrId: number, phno: string, designation: designations}) => {
   const exisEmp = await Employee.query()
     .where('empName', payload.empName)
     .andWhere('email', payload.email)
@@ -28,7 +28,7 @@ export const postEmp = async (payload: Employee) => {
   if (exisEmp !== null) {
     throw new Error('Employee already exists.')
   } else {
-    const emp = await Employee.create(payload) // try with save method too, chk whether the beforeSave hook works for create
+    const emp = await Employee.create(payload)  // try with save method too, chk whether the beforeSave hook works for create
     return emp
   }
 }

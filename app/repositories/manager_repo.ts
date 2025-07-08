@@ -2,6 +2,7 @@ import Manager from '#models/manager'
 
 export const getAll = async () => {
   const mgr = await Manager.all()
+  console.log(mgr)
   return mgr
 }
 
@@ -16,7 +17,7 @@ export const getMgrByQry = async (name: string, email: string) => {
   return mgr
 }
 
-export const postMgr = async (payload: Manager) => {
+export const postMgr = async (payload: {mgrName: string, email: string, dob: Date, salary: number, phno: string}) => {
   const exisMgr = await Manager.query()
     .where('mgrName', payload.mgrName)
     .andWhere('email', payload.email)

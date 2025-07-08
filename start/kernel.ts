@@ -11,6 +11,11 @@
 import router from '@adonisjs/core/services/router'
 import server from '@adonisjs/core/services/server'
 
+import { Settings } from 'luxon'
+
+Settings.defaultZone = 'Asia/Kolkata'
+
+
 /**
  * The error handler is used to convert an exception
  * to an HTTP response.

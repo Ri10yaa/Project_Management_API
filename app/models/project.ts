@@ -9,7 +9,7 @@ export default class Project extends BaseModel {
   declare proTitle: string
 
   @column()
-  declare type: 'IoT' | 'Web' | 'Mobile' | 'ML'
+  declare type: 'iot' | 'web' | 'mobile' | 'ml'
 
   @column()
   declare mgrId: number

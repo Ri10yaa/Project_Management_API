@@ -14,90 +14,89 @@ export default class TasksController {
   /**
    * Display a list of resource
    */
-  async index({ response }: HttpContext) {
+  async index({}: HttpContext) {
     try {
       const res = await getAll()
-      return response.status(200).send({ success: true, data: res })
+      return { success: true, data: res }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
 
-  async store({ request, response }: HttpContext) {
+  async store({ request }: HttpContext) {
     try {
       const payload = await postAndPutValidator.validate(request.body())
       const task = await postTask(payload as unknown as Task)
-      return response.status(200).send({ success: true, data: task })
+      return { success: true, data: task }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
   /**
    * Show individual record
    */
-  async show({ request, params, response }: HttpContext) {
+  async show({ request, params }: HttpContext) {
     try {
-      if (params.id != null && Object.keys(request.qs()).length == 0) {
+      if (params.id !== null && Object.keys(request.qs()).length === 0) {
         const pathparam = await validatePathParam.validate(params.id)
         const res = getTaskById(pathparam.id)
 
-        return response.status(200).send(res)
+        return {success: true, data: res}
 
-      } else if (params.id == null && Object.keys(request.qs()).length > 0) {
+      } else if (params.id === null && Object.keys(request.qs()).length > 0) {
 
         const payload = await getValidator.validate(request.qs())
         const res = await getTaskByQry(payload.taskTitle, payload.assignedTo)
 
-        return response.status(200).send({ success: true, data: res })
+        return { success: true, data: res }
       } else {
-        return response
-          .status(404)
-          .send({ success: false, data: 'Send either path param or query param.' })
+        return { success: false, data: 'Send either path param or query param.' }
       }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
-  async handlePatch({ params, request, response }: HttpContext) {
+  async handlePatch({ params, request }: HttpContext) {
     try {
       const pathparam = await validatePathParam.validate(params.id)
       const payload = await patchValidator.validate(request.body())
       const pro = await updateTask(pathparam.id, payload as unknown as Task)
 
-      return response.status(200).send({ success: true, data: pro })
+      return { success: true, data: pro }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request }: HttpContext) {
     try {
       const req = request.only(['taskTitle', 'assignedTo', 'mgrId'])
       const pathparam = await validatePathParam.validate(params.id)
       const payload = await postAndPutValidator.validate(req)
 
       const pro = await updateTask(pathparam.id, payload as unknown as Task)
-      return response.status(200).send({ success: true, data: pro })
+
+      return { success: true, data: pro }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
   /**
    * Delete record
    */
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params }: HttpContext) {
     try {
       const pathparam = await validatePathParam.validate(params.id)
       await deleteTask(pathparam.id)
-      return response.status(200).send({ success: true, data: 'Task deleted.' })
+      return { success: true, data: 'Task deleted.' }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 }

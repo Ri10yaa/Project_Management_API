@@ -3,6 +3,13 @@ import { checkID } from '#start/rules/validationForIDs'
 import { unique } from '#start/rules/uniqueEmail'
 import { uniquePn } from '#start/rules/uniquePhoneNo'
 
+
+export enum designations{
+  DEVELOPER = 'developer',
+  ARCHITECT = 'architect',
+  ANALYST = 'analyst'
+}
+
 export const validatePathParam = vine.compile(
   vine.object({
     id: vine.number().use(checkID({ table: 'employees', column: 'empId' })),
@@ -22,7 +29,7 @@ export const postputReq = vine.compile(
     dob: vine.date({ formats: ['DD/MM/YYYY'] }),
     salary: vine.number(),
     mgrId: vine.number().use(checkID({ table: 'managers', column: 'mgrId' })),
-    designation: vine.enum(['developer', 'architect', 'analyst']),
+    designation: vine.enum(designations),
     email: vine.string().email().use(unique({ table: 'employees'})),
     phno: vine.string().fixedLength(10).use(uniquePn({table: 'employees'}))
   })

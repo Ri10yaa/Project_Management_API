@@ -12,61 +12,58 @@ import Manager from '#models/manager'
 
 export default class ManagersController {
  
-  async index({ response }: HttpContext) {
+  async index({}: HttpContext) {
     try {
 
       const res = await getAll()
-      return response.status(200).send({ success: true, data: res })
+      return { success: true, data: res }
 
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.message })
+      throw err
     }
   }
 
 
-  async store({ request, response }: HttpContext) {
+  async store({ request }: HttpContext) {
     try {
 
       const payload = await mgrReq.validate(request.body())
-      const emp = await postMgr(payload as Manager)
+      const emp = await postMgr(payload)
 
-      return response.status(200).send({ success: true, data: emp })
+      return { success: true, data: emp }
 
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.message })
+      throw err
     }
   }
 
   
-  async show({ request, params, response }: HttpContext) {
+  async show({ request, params }: HttpContext) {
     try {
-      if (params.id != null && Object.keys(request.qs()).length == 0) {
+      if (params.id !== null && Object.keys(request.qs()).length === 0) {
 
         const pathparam = await validatePathParam.validate(params)
         const res = await getMgrById(pathparam.id)
 
-        return response.status(200).send({ success: true, data: res })
+        return { success: true, data: res }
 
-      } else if (params.id == null && Object.keys(request.qs()).length > 0) {
+      } else if (params.id === null && Object.keys(request.qs()).length > 0) {
 
         const payload = await getReq.validate(request.qs())
 
         const res = await getMgrByQry(payload.mgrName, payload.email)
 
-        return response.status(200).send({ success: true, data: res })
+        return { success: true, data: res }
 
       } else {
-
-        return response
-          .status(404)
-          .send({ success: false, data: 'Send either path param or query param.' })
+        return { success: false, data: 'Send either path param or query param.' }
       }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request }: HttpContext) {
     try {
       const req = request.only(['mgrName', 'dob', 'salary','email','phno'])
 
@@ -75,34 +72,34 @@ export default class ManagersController {
 
       const mgr = await updateMgr(pathparam.id, payload as Manager)
 
-      return response.status(200).send({ success: true, data: mgr })
+      return { success: true, data: mgr }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 
-  async handlePatch({ params, request, response }: HttpContext) {
+  async handlePatch({ params, request }: HttpContext) {
     try {
       const pathparam = await validatePathParam.validate(params)
       const payload = await patchMgrReq.validate(request.body())
       
       const emp = await updateMgr(pathparam.id, payload as Manager)
 
-      return response.status(200).send({ success: true, data: emp })
+      return { success: true, data: emp }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.message })
+      throw err
     }
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params }: HttpContext) {
     try {
       const pathparam = await validatePathParam.validate(params)
 
       await deleteMgr(pathparam.id)
       
-      return response.status(200).send({ success: true, data: 'Manager deleted.' })
+      return { success: true, data: 'Manager deleted.' }
     } catch (err) {
-      return response.status(500).send({ success: false, data: err.messages })
+      throw err
     }
   }
 }
