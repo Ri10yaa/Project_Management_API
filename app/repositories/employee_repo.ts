@@ -2,10 +2,11 @@ import Employee from '#models/employee'
 import { designations } from '#validators/employee'
 export const getAll = async () => {
   const emps = await Employee.all()
+  console.log(emps[0].$attributes)
   return emps
 }
 
-export const getEmpById = async (id: any) => {
+export const getEmpById = async (id: number) => {
   const emp = await Employee.findOrFail(id)
   return emp
 }

@@ -2,16 +2,16 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Project extends BaseModel {
-  @column({ isPrimary: true })
+  @column({ isPrimary: true, columnName: 'proId' })
   declare proId: number
 
-  @column()
+  @column({columnName: 'proTitle'})
   declare proTitle: string
 
   @column()
   declare type: 'iot' | 'web' | 'mobile' | 'ml'
 
-  @column()
+  @column({columnName: 'mgrId'})
   declare mgrId: number
 
   @column.dateTime({ autoCreate: true, serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm') })
@@ -20,5 +20,4 @@ export default class Project extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true, serialize: (value: DateTime) => value.toFormat('dd/MM/yyyy HH:mm') })
   declare updatedAt: DateTime
 
-  //add before save here
 }

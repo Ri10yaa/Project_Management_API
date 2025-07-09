@@ -36,14 +36,14 @@ export default class ProjectsController {
  
   async show({ request, params }: HttpContext) {
     try {
-      if (params.id !== null && Object.keys(request.qs()).length === 0) {
+      if (params.id !== undefined && Object.keys(request.qs()).length === 0) {
 
-        const pathparam = await validatePathParam.validate(params.id)
-        const res = getProById(pathparam.id)
+        const pathparam = await validatePathParam.validate(params)
+        const res = await getProById(pathparam.id)
 
         return { success: true, data: res }
 
-      } else if (params.id === null && Object.keys(request.qs()).length > 0) {
+      } else if (params.id === undefined && Object.keys(request.qs()).length > 0) {
 
         const payload = await getValidator.validate(request.qs())
 
@@ -61,7 +61,7 @@ export default class ProjectsController {
 
   async handlePatch({ params, request }: HttpContext) {
     try {
-      const pathparam = await validatePathParam.validate(params.id)
+      const pathparam = await validatePathParam.validate(params)
       const payload = await patchValidator.validate(request.body())
 
       const pro = await updatePro(pathparam.id, payload as Project)
@@ -77,7 +77,7 @@ export default class ProjectsController {
   async update({ params, request }: HttpContext) {
     try {
       const req = request.only(['proTitle', 'type', 'mgrId'])
-      const pathparam = await validatePathParam.validate(params.id)
+      const pathparam = await validatePathParam.validate(params)
       const payload = await postAndPutValidator.validate(req)
 
       const pro = await updatePro(pathparam.id, payload as Project)
@@ -91,7 +91,7 @@ export default class ProjectsController {
 
   async destroy({ params }: HttpContext) {
     try {
-      const pathparam = await validatePathParam.validate(params.id)
+      const pathparam = await validatePathParam.validate(params)
       await deletePro(pathparam.id)
       
       return { success: true, data: 'Project deleted.' }

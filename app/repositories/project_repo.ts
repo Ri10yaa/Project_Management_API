@@ -1,5 +1,5 @@
 import Project from '#models/project'
-import { projectType } from '#validators/project'
+import { Domains } from '#validators/project'
 
 export const getAll = async () => {
   const pros = await Project.all()
@@ -12,7 +12,7 @@ export const getProById = async (id: any) => {
 }
 
 export const getProByQry = async (title: string, type: string) => {
-  const pro = await Project.findByOrFail({ protitle: title, type: type })
+  const pro = await Project.findByOrFail({ proTitle: title, type: type })
   return pro
 }
 
@@ -20,15 +20,16 @@ export const getProByQry = async (title: string, type: string) => {
 Either I should destructure it in the controller and send individual params or
 send as instance of model
 */
-export const postPro = async (payload: {proTitle: string, type: projectType, mgrId: number}) => {
+export const postPro = async (payload: {proTitle: string, type: Domains, mgrId: number}) => {
   const exisPro = await Project.query()
     .where('proTitle', payload.proTitle)
     .andWhere('type', payload.type)
     .first()
+    console.log("Checked the existing data ")
   if (exisPro != null) {
     throw new Error('Project already exists.')
   } else {
-    const pro = await Project.create(payload) // try with save method too, chk whether the beforeSave hook works for create
+    const pro = await Project.create(payload) 
     return pro
   }
 }

@@ -27,7 +27,7 @@ export default class TasksController {
   async store({ request }: HttpContext) {
     try {
       const payload = await postAndPutValidator.validate(request.body())
-      const task = await postTask(payload as unknown as Task)
+      const task = await postTask(payload)
       return { success: true, data: task }
     } catch (err) {
       throw err
@@ -39,16 +39,16 @@ export default class TasksController {
    */
   async show({ request, params }: HttpContext) {
     try {
-      if (params.id !== null && Object.keys(request.qs()).length === 0) {
-        const pathparam = await validatePathParam.validate(params.id)
+      if (params.id !== undefined && Object.keys(request.qs()).length === 0) {
+        const pathparam = await validatePathParam.validate(params)
         const res = getTaskById(pathparam.id)
 
         return {success: true, data: res}
 
-      } else if (params.id === null && Object.keys(request.qs()).length > 0) {
+      } else if (params.id === undefined && Object.keys(request.qs()).length > 0) {
 
         const payload = await getValidator.validate(request.qs())
-        const res = await getTaskByQry(payload.taskTitle, payload.assignedTo)
+        const res = await getTaskByQry(payload.taskId, payload.assignedTo)
 
         return { success: true, data: res }
       } else {
@@ -61,7 +61,7 @@ export default class TasksController {
 
   async handlePatch({ params, request }: HttpContext) {
     try {
-      const pathparam = await validatePathParam.validate(params.id)
+      const pathparam = await validatePathParam.validate(params)
       const payload = await patchValidator.validate(request.body())
       const pro = await updateTask(pathparam.id, payload as unknown as Task)
 
@@ -76,7 +76,7 @@ export default class TasksController {
   async update({ params, request }: HttpContext) {
     try {
       const req = request.only(['taskTitle', 'assignedTo', 'mgrId'])
-      const pathparam = await validatePathParam.validate(params.id)
+      const pathparam = await validatePathParam.validate(params)
       const payload = await postAndPutValidator.validate(req)
 
       const pro = await updateTask(pathparam.id, payload as unknown as Task)
@@ -92,7 +92,7 @@ export default class TasksController {
    */
   async destroy({ params }: HttpContext) {
     try {
-      const pathparam = await validatePathParam.validate(params.id)
+      const pathparam = await validatePathParam.validate(params)
       await deleteTask(pathparam.id)
       return { success: true, data: 'Task deleted.' }
     } catch (err) {

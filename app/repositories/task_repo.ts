@@ -1,4 +1,5 @@
 import Task from '#models/task'
+import { DateTime } from 'luxon'
 
 export const getAll = async () => {
   const tasks = await Task.all()
@@ -10,8 +11,8 @@ export const getTaskById = async (id: any) => {
   return task
 }
 
-export const getTaskByQry = async (title: string, empId: number) => {
-  const task = await Task.findByOrFail({ taskTitle: title, assignedTo: empId })
+export const getTaskByQry = async (id: number, empId: number) => {
+  const task = await Task.findByOrFail({ taskId: id, assignedTo: empId })
   return task
 }
 
@@ -19,7 +20,7 @@ export const getTaskByQry = async (title: string, empId: number) => {
 Either I should destructure it in the controller and send individual params or
 send as instance of model
 */
-export const postTask = async (payload: Task) => {
+export const postTask = async (payload: {taskTitle: string, assignedTo: number, proId: number}) => {
   const exisTask = await Task.query()
     .where('taskTitle', payload.taskTitle)
     .andWhere('assignedTo', payload.assignedTo)

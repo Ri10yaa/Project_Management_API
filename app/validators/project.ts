@@ -1,7 +1,14 @@
 import vine from '@vinejs/vine'
 import { checkID } from '#start/rules/validationForIDs'
 
-export enum projectType{
+function includeUnderscore (value: unknown){
+  if(typeof value === 'string'){
+    return value.replace(" ","_")
+  }
+  
+}
+
+export enum Domains{
   WEB = 'web',
   MOBILE = 'mobile',
   ML = 'ml',
@@ -16,16 +23,16 @@ export const validatePathParam = vine.compile(
 
 export const postAndPutValidator = vine.compile(
   vine.object({
-    proTitle: vine.string().minLength(3).maxLength(30),
-    type: vine.enum(projectType),
+    proTitle: vine.string().minLength(3).maxLength(30).parse(includeUnderscore),
+    type: vine.enum(Domains),
     mgrId: vine.number().use(checkID({ table: 'managers', column: 'mgrId' })),
   })
 )
 
 export const patchValidator = vine.compile(
   vine.object({
-    proTitle: vine.string().minLength(3).maxLength(30).optional(),
-    type: vine.enum(projectType).optional(),
+    proTitle: vine.string().minLength(3).maxLength(30).parse(includeUnderscore).optional(),
+    type: vine.enum(Domains).optional(),
     mgrId: vine
       .number()
       .optional()
@@ -35,7 +42,7 @@ export const patchValidator = vine.compile(
 
 export const getValidator = vine.compile(
   vine.object({
-    proTitle: vine.string().minLength(3).maxLength(30),
-    type: vine.enum(projectType),
+    proTitle: vine.string().minLength(3).maxLength(30).parse(includeUnderscore),
+    type: vine.enum(Domains),
   })
 )

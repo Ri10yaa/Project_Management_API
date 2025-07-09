@@ -14,7 +14,6 @@ export default class EmployeesController {
   async index({}: HttpContext) {
     try {
       const res = await getAll()
-
       return { success: true, data: res }
     } catch (err) {
       throw err
@@ -34,13 +33,13 @@ export default class EmployeesController {
 
   async show({ request, params }: HttpContext) {
     try {
-      if (params.id !== null && Object.keys(request.qs()).length === 0) {
+      if (params.id !== undefined && Object.keys(request.qs()).length === 0) {
         const pathparam = await validatePathParam.validate(params)
 
-        const res = getEmpById(pathparam.id)
+        const res = await getEmpById(pathparam.id)
 
         return { success: true, data: res }
-      } else if (params.id === null && Object.keys(request.qs()).length > 0) {
+      } else if (params.id === undefined && Object.keys(request.qs()).length > 0) {
         const payload = await getReqQuery.validate(request.qs())
         const res = await getEmpByQry(payload.empName, payload.email)
 

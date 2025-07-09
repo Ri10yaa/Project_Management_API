@@ -40,14 +40,14 @@ export default class ManagersController {
   
   async show({ request, params }: HttpContext) {
     try {
-      if (params.id !== null && Object.keys(request.qs()).length === 0) {
+      if (params.id !== undefined && Object.keys(request.qs()).length === 0) {
 
         const pathparam = await validatePathParam.validate(params)
         const res = await getMgrById(pathparam.id)
 
         return { success: true, data: res }
 
-      } else if (params.id === null && Object.keys(request.qs()).length > 0) {
+      } else if (params.id === undefined && Object.keys(request.qs()).length > 0) {
 
         const payload = await getReq.validate(request.qs())
 

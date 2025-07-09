@@ -19,7 +19,7 @@ export const validatePathParam = vine.compile(
 export const getReqQuery = vine.compile(
   vine.object({
     empName: vine.string(),
-    email: vine.string().email().use(unique({ table: 'employees'}))
+    email: vine.string().email()
   })
 )
 
