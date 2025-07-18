@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Manager from '#models/manager'
 
 export const getAll = async () => {
@@ -22,7 +23,7 @@ export const postMgr = async (payload: {mgrName: string, email: string, dob: Dat
     .where('mgrName', payload.mgrName)
     .andWhere('email', payload.email)
     .first()
-  if (exisMgr != null) {
+  if (exisMgr !== null) {
     throw new Error('Manager already exists.')
   } else {
     const mgr = await Manager.create(payload)

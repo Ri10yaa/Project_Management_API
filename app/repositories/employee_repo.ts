@@ -1,8 +1,8 @@
 import Employee from '#models/employee'
 import { designations } from '#validators/employee'
+
 export const getAll = async () => {
   const emps = await Employee.all()
-  console.log(emps[0].$attributes)
   return emps
 }
 

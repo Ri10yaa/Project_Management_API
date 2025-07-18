@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import vine from '@vinejs/vine'
 import { checkID } from '#start/rules/validationForIDs'
 import { unique } from '#start/rules/uniqueEmail'
@@ -12,7 +13,7 @@ export const validatePathParam = vine.compile(
 export const getReq = vine.compile(
   vine.object({
     mgrName: vine.string(),
-    email: vine.string().email()
+    email: vine.string().email(),
   })
 )
 
@@ -22,7 +23,17 @@ export const mgrReq = vine.compile(
     dob: vine.date({ formats: ['DD/MM/YYYY'] }),
     salary: vine.number(),
     email: vine.string().email().use(unique({ table: 'managers'})),
-    phno: vine.string().fixedLength(10).use(uniquePn({table: 'managers'}))
+    phno: vine.string().fixedLength(10).use(uniquePn({table: 'managers'})),
+  })
+)
+
+export const mgrPutReq = vine.compile(
+  vine.object({
+    mgrName: vine.string().minLength(3).maxLength(30),
+    dob: vine.date({ formats: ['DD/MM/YYYY'] }),
+    salary: vine.number(),
+    email: vine.string().email(),
+    phno: vine.string().fixedLength(10),
   })
 )
 

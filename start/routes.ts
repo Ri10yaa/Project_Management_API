@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /*
 |--------------------------------------------------------------------------
 | Routes file
@@ -8,6 +9,15 @@
 */
 
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
+
+
+/* -----Login route------*/
+router.post('/register','#controllers/auth_controller.register')
+router.post('/login','#controllers/auth_controller.login')
+router.delete('/logout','#controllers/auth_controller.logout').use(middleware.auth())
+router.get('/me','#controllers/auth_controller.me')
+
 
 /* ------employee-------- */
 router
@@ -26,7 +36,7 @@ router
 
     router.delete('/:id', '#controllers/employees_controller.destroy')
   })
-  .prefix('emp')
+  .prefix('emp').use(middleware.auth())
 
 /* ------Manager------- */
 
@@ -46,7 +56,7 @@ router
 
     router.delete('/:id', '#controllers/managers_controller.destroy')
   })
-  .prefix('mgr')
+  .prefix('mgr').use(middleware.auth())
 
 /* --------Projects---------- */
 
@@ -66,7 +76,7 @@ router
 
     router.delete('/:id', '#controllers/projects_controller.destroy')
   })
-  .prefix('pro')
+  .prefix('pro').use(middleware.auth())
 
 /* -------Tasks------- */
 
@@ -86,4 +96,4 @@ router
 
     router.delete('/:id', '#controllers/tasks_controller.destroy')
   })
-  .prefix('task')
+  .prefix('task').use(middleware.auth())
