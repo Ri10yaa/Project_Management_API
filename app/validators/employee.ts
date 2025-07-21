@@ -23,7 +23,7 @@ export const getReqQuery = vine.compile(
   })
 )
 
-export const postputReq = vine.compile(
+export const postReq = vine.compile(
   vine.object({
     empName: vine.string().minLength(3).maxLength(30),
     dob: vine.date({ formats: ['DD/MM/YYYY'] }),
@@ -32,6 +32,18 @@ export const postputReq = vine.compile(
     designation: vine.enum(designations),
     email: vine.string().email().use(unique({ table: 'employees'})),
     phno: vine.string().fixedLength(10).use(uniquePn({table: 'employees'}))
+  })
+)
+
+export const putReq = vine.compile(
+  vine.object({
+    empName: vine.string().minLength(3).maxLength(30),
+    dob: vine.date({ formats: ['DD/MM/YYYY'] }),
+    salary: vine.number(),
+    mgrId: vine.number().use(checkID({ table: 'managers', column: 'mgrId' })),
+    designation: vine.enum(designations),
+    email: vine.string().email(),
+    phno: vine.string().fixedLength(10)
   })
 )
 

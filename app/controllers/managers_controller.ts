@@ -6,6 +6,7 @@ import {
   getMgrByQry,
   updateMgr,
   deleteMgr,
+  getAllIds
 } from '../repositories/manager_repo.js'
 import { mgrReq, patchMgrReq, validatePathParam, getReq, mgrPutReq } from '#validators/manager'
 import Manager from '#models/manager'
@@ -25,6 +26,15 @@ export default class ManagersController {
       const payload = await mgrReq.validate(request.body())
       const emp = await postMgr(payload)
 
+      return { success: true, data: emp }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async get({ }: HttpContext){
+    try {
+      const emp = await getAllIds()
       return { success: true, data: emp }
     } catch (err) {
       throw err

@@ -55,6 +55,8 @@ router
     router.patch('/:id', '#controllers/managers_controller.handlePatch')
 
     router.delete('/:id', '#controllers/managers_controller.destroy')
+
+    router.get('/all/id','#controllers/managers_controller.get')
   })
   .prefix('mgr').use(middleware.auth())
 

@@ -7,7 +7,7 @@ import {
   deleteEmp,
   updateEmp,
 } from '../repositories/employee_repo.js'
-import { getReqQuery, postputReq, patchReq, validatePathParam } from '#validators/employee'
+import { getReqQuery, postReq, patchReq, validatePathParam, putReq } from '#validators/employee'
 import Employee from '#models/employee'
 
 export default class EmployeesController {
@@ -22,7 +22,7 @@ export default class EmployeesController {
 
   async store({ request }: HttpContext) {
     try {
-      const payload = await postputReq.validate(request.body())
+      const payload = await postReq.validate(request.body())
       const emp = await postEmp(payload)
       
       return { success: true, data: emp }
@@ -80,7 +80,7 @@ export default class EmployeesController {
 
       const pathparam = await validatePathParam.validate(params)
 
-      const payload = await postputReq.validate(req)
+      const payload = await putReq.validate(req)
 
       const emp = await updateEmp(pathparam.id, payload as Employee)
 

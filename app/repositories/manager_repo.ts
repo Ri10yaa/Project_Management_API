@@ -12,6 +12,11 @@ export const getMgrById = async (id: any) => {
   return mgr
 }
 
+export const getAllIds = async () =>{
+  const ids = await Manager.query().select('mgrId').from('managers')
+  return ids
+}
+
 // query by email or phno
 export const getMgrByQry = async (name: string, email: string) => {
   const mgr = await Manager.query().where('mgrName',name).andWhere('email',email).first()
